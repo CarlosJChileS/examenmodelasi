@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 1. Activar entorno virtual con API keys ya insertadas
+# 1. Activa entorno virtual
 source ./aienv/bin/activate
 
-# 2. Iniciar backend Python (en segundo plano)
+# 2. Inicia backend Python en 7777 (background)
 uvicorn playground:app --host 0.0.0.0 --port 7777 &
 
-# 3. Servir frontend en 8080
-npx serve -s . -l 8080
+# 3. Inicia servidor Nginx (foreground)
+nginx -g 'daemon off;'
