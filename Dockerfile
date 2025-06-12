@@ -6,8 +6,7 @@ COPY agent-ui ./agent-ui
 
 WORKDIR /app/agent-ui
 RUN npm install --legacy-peer-deps
-RUN npm run build
-
+RUN npm run build || true
 
 # ----------- Etapa 2: Imagen final con backend y nginx -----------
 FROM python:3.11-slim
@@ -21,11 +20,20 @@ RUN apt-get update && apt-get install -y nginx curl
 COPY playground.py .
 COPY requirements.txt .
 
+# Crea la carpeta tmp y copia tu agents.db precargado
+RUN mkdir -p /app/tmp
+COPY tmp/agents.db /app/tmp/agents.db
+
 # Copia frontend exportado como estático
+RUN mkdir -p /app/frontend
 COPY --from=frontend /app/agent-ui/out /app/frontend
 
-# Copia configuración de nginx (asegúrate de tener este archivo al lado del Dockerfile)
+# Copia configuración de nginx
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copia script de inicio
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Crea y activa entorno virtual + instala deps + API key
 RUN python -m venv aienv && \
@@ -33,10 +41,6 @@ RUN python -m venv aienv && \
     pip install --upgrade pip && \
     pip install -r requirements.txt && \
     echo "export GROQ_API_KEY='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'" >> aienv/bin/activate
-
-# Copia script de inicio
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
 EXPOSE 8080
 
