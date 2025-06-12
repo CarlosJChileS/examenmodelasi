@@ -7,7 +7,7 @@ COPY agent-ui ./agent-ui
 WORKDIR /app/agent-ui
 RUN npm install --legacy-peer-deps
 RUN npm run build
-RUN npm run export
+
 
 # ----------- Etapa 2: Imagen final con backend y nginx -----------
 FROM python:3.11-slim
