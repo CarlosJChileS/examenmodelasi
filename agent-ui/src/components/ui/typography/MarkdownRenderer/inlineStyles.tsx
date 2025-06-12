@@ -64,7 +64,7 @@ const Paragraph = ({ className, ...props }: ParagraphProps) => (
 
 const EmphasizedText = ({ className, ...props }: EmphasizedTextProps) => (
   <em
-    className={cn(className, 'PARAGRAPH_SIZES.lead')}
+    className={cn(className, PARAGRAPH_SIZES.lead)}
     {...filterProps(props)}
   />
 )
@@ -75,14 +75,14 @@ const ItalicText = ({ className, ...props }: ItalicTextProps) => (
 
 const StrongText = ({ className, ...props }: StrongTextProps) => (
   <strong
-    className={cn(className, 'PARAGRAPH_SIZES.lead')}
+    className={cn(className, PARAGRAPH_SIZES.lead)}
     {...filterProps(props)}
   />
 )
 
 const BoldText = ({ className, ...props }: BoldTextProps) => (
   <b
-    className={cn(className, 'PARAGRAPH_SIZES.lead')}
+    className={cn(className, PARAGRAPH_SIZES.lead)}
     {...filterProps(props)}
   />
 )
@@ -148,7 +148,6 @@ const Heading6 = ({ className, ...props }: HeadingProps) => (
   <h6 className={cn(className, PARAGRAPH_SIZES.lead)} {...filterProps(props)} />
 )
 
-// 🚩 AQUI VA LA CORRECCIÓN
 const Img = ({ src, alt }: ImgProps) => {
   const [error, setError] = useState(false)
 
@@ -169,7 +168,7 @@ const Img = ({ src, alt }: ImgProps) => {
         </div>
       ) : (
         <Image
-          src={src}
+          src={typeof src === "string" ? src : ""}
           width={96}
           height={56}
           alt={alt ?? 'Rendered image'}
