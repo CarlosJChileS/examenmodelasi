@@ -148,6 +148,7 @@ const Heading6 = ({ className, ...props }: HeadingProps) => (
   <h6 className={cn(className, PARAGRAPH_SIZES.lead)} {...filterProps(props)} />
 )
 
+// 🚩 AQUI VA LA CORRECCIÓN
 const Img = ({ src, alt }: ImgProps) => {
   const [error, setError] = useState(false)
 
@@ -159,11 +160,11 @@ const Img = ({ src, alt }: ImgProps) => {
         <div className="flex h-40 flex-col items-center justify-center gap-2 rounded-md bg-secondary/50 text-muted">
           <Paragraph className="text-primary">Image unavailable</Paragraph>
           <Link
-            href={src}
+            href={typeof src === "string" ? src : ""}
             target="_blank"
             className="max-w-md truncate underline"
           >
-            {src}
+            {typeof src === "string" ? src : "Archivo no disponible"}
           </Link>
         </div>
       ) : (
