@@ -28,7 +28,7 @@ RUN python -m venv aienv && \
 # Copia frontend compilado (no copies /public porque no existe)
 COPY --from=frontend /app/agent-ui/.next ./.next
 COPY --from=frontend /app/agent-ui/package.json .
-COPY --from=frontend /app/agent-ui/next.config.js .
+COPY --from=frontend /app/agent-ui/next.config.ts .
 
 # Instala herramientas necesarias
 RUN apt-get update && apt-get install -y curl
