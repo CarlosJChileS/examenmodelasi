@@ -1,4 +1,4 @@
-# ---------- Etapa 1: Build del frontend (Next.js) ----------
+# ---------- Etapa 1: Build del frontend ----------
 FROM node:20-alpine as frontend
 
 WORKDIR /app
@@ -8,34 +8,34 @@ WORKDIR /app/agent-ui
 RUN npm install --legacy-peer-deps
 RUN npm run build
 
-# ---------- Etapa 2: Imagen final (Python + frontend) ----------
+# ---------- Etapa 2: Imagen final ----------
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Instala dependencias de Python
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
-
 # Copia backend
 COPY playground.py .
+COPY requirements.txt .
 
-# Copia el frontend estático compilado (Next.js exporta en .next o out)
+# Crea entorno virtual y embebe la API key de Groq
+RUN python -m venv aienv && \
+    . aienv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt && \
+    echo "export GROQ_API_KEY='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'" >> aienv/bin/activate
+
+# Copia frontend compilado
 COPY --from=frontend /app/agent-ui/.next ./.next
 COPY --from=frontend /app/agent-ui/public ./public
 COPY --from=frontend /app/agent-ui/package.json .
 COPY --from=frontend /app/agent-ui/next.config.js .
-# (Copia otros archivos config si tu Next.js los requiere)
 
-# Instala dependencias para servir frontend estático (opcional, si usas 'serve')
-RUN pip install --no-cache-dir fastapi uvicorn python-multipart
-RUN pip install --no-cache-dir aiofiles
+# Instala herramientas necesarias
+RUN apt-get update && apt-get install -y curl
 
-# Exponer el puerto de backend
-EXPOSE 7777
+EXPOSE 8080
 
-# ---- Start script para servir ambos ----
+# Script que activa entorno y lanza todo
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
