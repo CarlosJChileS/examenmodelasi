@@ -1,3 +1,8 @@
+import os
+
+# Asegúrate de que siempre esté definida la API key, local o en la nube:
+os.environ["GROQ_API_KEY"] = "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"
+
 from agno.agent import Agent
 from agno.models.groq import Groq
 from agno.playground import Playground, serve_playground_app
@@ -34,5 +39,7 @@ finance_agent = Agent(
 app = Playground(agents=[web_agent, finance_agent]).get_app()
 
 if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Backend started!")
     serve_playground_app("playground:app", reload=True)
-##
