@@ -6,7 +6,7 @@ COPY agent-ui ./agent-ui
 
 WORKDIR /app/agent-ui
 RUN npm install --legacy-peer-deps
-# Forzar el build aunque falle por errores de tipos
+# Forzar el build aunque falle por errores de tipos (solo si lo necesitas, ojo)
 RUN npm run build || true
 
 # ---------- Etapa 2: Imagen final ----------
@@ -25,9 +25,8 @@ RUN python -m venv aienv && \
     pip install -r requirements.txt && \
     echo "export GROQ_API_KEY='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'" >> aienv/bin/activate
 
-# Copia frontend compilado
+# Copia frontend compilado (no copies /public porque no existe)
 COPY --from=frontend /app/agent-ui/.next ./.next
-COPY --from=frontend /app/agent-ui/public ./public
 COPY --from=frontend /app/agent-ui/package.json .
 COPY --from=frontend /app/agent-ui/next.config.js .
 
