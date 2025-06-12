@@ -10,7 +10,7 @@ from agno.storage.sqlite import SqliteStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
 
-agent_storage = "tmp/agents.db"
+agent_storage = "/app/tmp/agents.db"
 
 web_agent = Agent(
     name="Carlos Chile",
